@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\Hotel;
+use App\Models\Room;
 use Illuminate\Database\Seeder;
 
 class CountrySeeder extends Seeder
@@ -26,8 +27,17 @@ class CountrySeeder extends Seeder
         {
             foreach ($country->cities as $city)
             {
-                $city->hotels()->saveMany(Hotel::factory( mt_rand(1,10) )
+              $hotels = $city->hotels()->saveMany(Hotel::factory( mt_rand(1,10) )
                 ->make());
+                
+                foreach ($hotels as $hotel)
+                {
+                    $hotel->rooms()->saveMany(Room::factory( mt_rand(3,10) )
+                    ->make());
+
+                    
+                }
+                
             }
         }
         

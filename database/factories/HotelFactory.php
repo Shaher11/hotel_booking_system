@@ -22,7 +22,7 @@ class HotelFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->text(20),
+            'name' => rtrim( ucfirst($this->faker->text(20)), '.'),
             'description' => $this->faker->sentence(),
             'created_at' => $this->faker->dateTimeBetween('-20 days', '-10 days'),
             'updated_at' => $this->faker->dateTimeBetween('-5 days', '-1 days'),

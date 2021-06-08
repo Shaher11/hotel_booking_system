@@ -22,7 +22,12 @@ class RoomTypeFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'size' => $this->faker->numberBetween(1,5),
+            'price' => $this->faker->numberBetween(100,500),
+            'available' => $this->faker->numberBetween(1,10),       // available amount of rooms
+            'created_at' => $this->faker->dateTimeBetween('-9 days', '-4 days'),
+            'updated_at' => $this->faker->dateTimeBetween('-2 days', '-1 minute'),
+
         ];
     }
 }

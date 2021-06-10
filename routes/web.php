@@ -32,20 +32,26 @@ Route::get('/', function () {
     // })->get(); //  To return empty array
     
 
-   $result = DB::table('rooms')->whereNotExists(function ($query) use ($check_in, $check_out) {
+//    $result = DB::table('rooms')->join('room_types', 'rooms.room_type_id', '=', 'room_types.id')
+//         ->whereNotExists(function ($query) use ($check_in, $check_out) {
         
-         $query->select('reservations.id')
-                ->from('reservations')
-                ->join('reservation_room', 'reservations.id', '=', 'reservation_room.reservation_id')
-                ->whereRaw('rooms.id = reservation_room.room_id')
-                ->where(function($q) use($check_in, $check_out) {
+//          $query->select('reservations.id')
+//                 ->from('reservations')
+//                 ->join('reservation_room', 'reservations.id', '=', 'reservation_room.reservation_id')
+//                 ->whereRaw('rooms.id = reservation_room.room_id')
+//                 ->where(function($q) use($check_in, $check_out) {
             
-                $q->where('check_out', '>', $check_in);
-                $q->where('check_in', '<', $check_out);
+//                 $q->where('check_out', '>', $check_in);
+//                 $q->where('check_in', '<', $check_out);
                 
-            })->limit(1);    
-        })->paginate(10);
+//             })->limit(1);    
+//         })->paginate(10);
         
+
+    $result = Room::with('type')->whereDoesntHave('reservations', function($q) use($check_in, $check_out){
+        $q->where('check_out', '>', $check_in);
+        $q->where('check_in', '<', $check_out);
+    })->get();
     
 
         

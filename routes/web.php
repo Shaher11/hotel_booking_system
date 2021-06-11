@@ -194,9 +194,25 @@ Route::get('/', function () {
     
     // $result = $hotel->save();
 
+    ////////////////////////////////-- Create New Room and Room type  --///////////////////////////////
 
 
-     $city = City::find(1);
+    $hotel = Hotel::find(1);
+    
+    $room_type = new RoomType();
+    $room_type->size = 4;
+    $room_type->price = 350;
+    $room_type->available = 3;
+    $room_type->save();
+    
+    
+    $room = new Room;
+    $room->name = 'Room Name';
+    $room->description = 'Room Description';
+    $room->type()->associate($room_type);
+    
+    $result = $hotel->rooms()->save($room);
+     
     
     dump($result);
     

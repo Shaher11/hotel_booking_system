@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Hotel;
 use App\Models\Reservation;
 use App\Models\Room;
 use App\Models\RoomType;
@@ -135,7 +136,7 @@ Route::get('/', function () {
         
     ////////////////////////////////-- Get all reservations belongsTo hotel's owner --///////////////////////////////
 
-    $hotel_id = [3];
+    // $hotel_id = [3];
     
     // $result = Reservation::with(['rooms.type', 'user'])
         
@@ -147,16 +148,31 @@ Route::get('/', function () {
     //     ->get();
     
 
-    $result = Room::whereHas('hotel', function($q) use($hotel_id) {
-        $q->whereIn('hotel_id', $hotel_id);
-    })
-    ->withCount('reservations')
-    ->orderBy('reservations_count', 'DESC')
-    ->get();
+    // $result = Room::whereHas('hotel', function($q) use($hotel_id) {
+    //     $q->whereIn('hotel_id', $hotel_id);
+    // })
+    // ->withCount('reservations')
+    // ->orderBy('reservations_count', 'DESC')
+    // ->get();
 
+    
+    ////////////////////////////////-- Count related Models and group --///////////////////////////////
+    
+    $hotel_id = range(1,10);
+    
+    // $result = DB::table('rooms')
+    //         ->join('room_types', 'rooms.room_type_id', '=', 'room_types.id')
+    //         ->selectRaw('sum(room_types.available) as number_of_single_rooms, rooms.name')
+    //         ->groupBy('rooms.name', 'room_types.size')
+    //         ->having('room_types.size', '=', 1)
+    //         ->whereIn('rooms.hotel_id', $hotel_id)
+    //         ->orderByDesc('number_of_single_rooms')
+    //         ->get();
 
-
-
+    $result = Hotel::whereIn('id', $hotel_id)
+            ->withCount('rooms')
+            ->orderBy('rooms_count','desc')
+            ->get();
 
 
     

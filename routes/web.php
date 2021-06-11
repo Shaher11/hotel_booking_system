@@ -125,11 +125,23 @@ Route::get('/', function () {
     ////////////////////////////////-- Get all reservations made by $user_id --///////////////////////////////
 
 
-        $user_id = 1;
+        // $user_id = 1;
 
-        $result = Reservation::with(['rooms.type', 'rooms.hotel'])
-                ->where('user_id', $user_id)->first();
+        // $result = Reservation::with(['rooms.type', 'rooms.hotel'])
+        //         ->where('user_id', $user_id)->first();
         
+
+
+        
+    ////////////////////////////////-- Get all reservations belongsTo hotel's owner --///////////////////////////////
+
+    $hotel_id = [1];
+    
+    $result = Reservation::with(['rooms.type', 'user'])
+        ->whereHas('rooms.hotel', function($q) use($hotel_id) {
+            $q->whereIn('hotel_id', $hotel_id);
+        })->get();
+    
     dump($result);
     
     

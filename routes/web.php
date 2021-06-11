@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\City;
 use App\Models\Hotel;
 use App\Models\Reservation;
 use App\Models\Room;
@@ -158,7 +159,7 @@ Route::get('/', function () {
     
     ////////////////////////////////-- Count related Models and group --///////////////////////////////
     
-    $hotel_id = range(1,10);
+    // $hotel_id = range(1,10);
     
     // $result = DB::table('rooms')
     //         ->join('room_types', 'rooms.room_type_id', '=', 'room_types.id')
@@ -169,12 +170,33 @@ Route::get('/', function () {
     //         ->orderByDesc('number_of_single_rooms')
     //         ->get();
 
-    $result = Hotel::whereIn('id', $hotel_id)
-            ->withCount('rooms')
-            ->orderBy('rooms_count','desc')
-            ->get();
+    // $result = Hotel::whereIn('id', $hotel_id)
+    //         ->withCount('rooms')
+    //         ->orderBy('rooms_count','desc')
+    //         ->get();
+
+    // $result = DB::table('users')->orderByDesc(
+    //     DB::table('reservations')
+    //     ->select('price')
+    //     ->whereColumn('users.id', 'reservations.user_id')
+    //     ->orderByDesc('price')
+    //     ->limit(1)
+    // )->get();
+    
+    ////////////////////////////////-- Create New Hotel using Eloquent  --///////////////////////////////
+
+    // $city = City::find(1);
+    
+    // $hotel = new Hotel;
+    // $hotel->name = 'Hotel Name';
+    // $hotel->description = 'Hotel Description';
+    // $hotel->city()->associate($city);
+    
+    // $result = $hotel->save();
 
 
+
+     $city = City::find(1);
     
     dump($result);
     

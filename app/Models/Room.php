@@ -18,7 +18,7 @@ class Room extends Model
 
     public function reservations(): BelongsToMany
     {
-        return $this->belongsToMany(Reservation::class)->withTimestamps();
+        return $this->belongsToMany(Reservation::class)->withPivot('status')->withTimestamps();
     }
 
     public function hotel(): BelongsTo

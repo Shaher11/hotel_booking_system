@@ -17,7 +17,7 @@ class CreateReservationRoomTable extends Migration
             $table->id();
             $table->foreignId('reservation_id')->constrained('reservations')->onDelete('cascade');
             $table->foreignId('room_id')->constrained('rooms')->onDelete('cascade');
-            $table->boolean('status')->default(false);
+            $table->boolean('status')->default(false);                                              // For confirming reservation 
             $table->timestamps();
         });
     }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\City;
+use App\Models\Country;
 use App\Models\Hotel;
 use App\Models\Reservation;
 use App\Models\Room;
@@ -197,22 +198,55 @@ Route::get('/', function () {
     ////////////////////////////////-- Create New Room and Room type  --///////////////////////////////
 
 
-    $hotel = Hotel::find(1);
+    // $hotel = Hotel::find(1);
     
-    $room_type = new RoomType();
-    $room_type->size = 4;
-    $room_type->price = 350;
-    $room_type->available = 3;
-    $room_type->save();
+    // $room_type = new RoomType();
+    // $room_type->size = 4;
+    // $room_type->price = 350;
+    // $room_type->available = 3;
+    // $room_type->save();
     
     
-    $room = new Room;
-    $room->name = 'Room Name';
-    $room->description = 'Room Description';
-    $room->type()->associate($room_type);
+    // $room = new Room;
+    // $room->name = 'Room Name';
+    // $room->description = 'Room Description';
+    // $room->type()->associate($room_type);
     
-    $result = $hotel->rooms()->save($room);
+    // $result = $hotel->rooms()->save($room);
      
+
+    ////////////////////////////////-- Update and Delete using Eloquent  --///////////////////////////////
+
+    // $room = Room::find(1);
+    // $room->name = 'New room name';
+    // $result= $room->save();
+    
+
+    // $country = Country::find(5);
+    // $result= $country->delete(); 
+
+    
+    
+    // $result= Country::destroy([4,6,7,8,9,10]);  // Delete array of countries with there cities
+    
+
+    ////////////////////////////////-- Background cron / queue task | Delete non paid resarvations  --///////////////////////////////
+
+    
+    $result = Reservation::chunk(5, function($reservations) {
+        foreach($reservations as $reservation)
+        {
+            foreach ($reservation->rooms()->get() as $room)
+            {
+                if(!$room->pivot->status)
+                $reservation->delete();
+            }
+        
+        }
+    });
+
+
+
     
     dump($result);
     

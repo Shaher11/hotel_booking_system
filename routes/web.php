@@ -135,15 +135,32 @@ Route::get('/', function () {
         
     ////////////////////////////////-- Get all reservations belongsTo hotel's owner --///////////////////////////////
 
-    $hotel_id = [1];
+    $hotel_id = [3];
     
-    $result = Reservation::with(['rooms.type', 'user'])
-        ->whereHas('rooms.hotel', function($q) use($hotel_id) {
-            $q->whereIn('hotel_id', $hotel_id);
-        })->get();
+    // $result = Reservation::with(['rooms.type', 'user'])
+        
+    //     ->select('reservations.*', DB::raw('DATEDIFF(check_out, check_in) as nights'))
+    //     ->whereHas('rooms.hotel', function($q) use($hotel_id) {
+    //         $q->whereIn('hotel_id', $hotel_id);
+    //     })
+    //     ->orderBy('nights', 'DESC')
+    //     ->get();
+    
+
+    $result = Room::whereHas('hotel', function($q) use($hotel_id) {
+        $q->whereIn('hotel_id', $hotel_id);
+    })
+    ->withCount('reservations')
+    ->orderBy('reservations_count', 'DESC')
+    ->get();
+
+
+
+
+
+
     
     dump($result);
-    
     
     return view('welcome');
 });
